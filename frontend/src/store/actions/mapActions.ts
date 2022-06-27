@@ -33,12 +33,14 @@ export const setUserPosition = (lan: number, lng: number) => {
 };
 
 export const getWeatherByCoord = (lan: number, lng: number) => {
+  console.log(lan, lng);
   return async (dispatch: any) => {
     const {data} = await apiPost({
       data: {
         lan,
         lng
-      }
+      },
+      url: '/get-weather'
     });
     dispatch({
       type: ACTIONS.MAP.ADD_CITY_TO_ARRAY,
