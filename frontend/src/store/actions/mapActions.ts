@@ -1,5 +1,6 @@
 import {ACTIONS} from "../../utils/constants";
 import {apiPost} from "../../http/httpPlaceholder";
+import {toast} from "react-toastify";
 
 type Post = {
   id: number,
@@ -13,7 +14,7 @@ type Post = {
 
 export const setUserStartPosition = () => {
   return async (dispatch: any) => {
-    const position = localStorage.getItem('position');
+    const position = JSON.parse(String(localStorage.getItem('position')));
     if (position) {
       dispatch({
         type: ACTIONS.MAP.SET_USER_DEFAULT_POSITION,
@@ -33,18 +34,21 @@ export const setUserPosition = (lan: number, lng: number) => {
 };
 
 export const getWeatherByCoord = (lan: number, lng: number) => {
-  console.log(lan, lng);
   return async (dispatch: any) => {
-    const {data} = await apiPost({
-      data: {
-        lan,
-        lng
-      },
-      url: '/get-weather'
-    });
-    dispatch({
-      type: ACTIONS.MAP.ADD_CITY_TO_ARRAY,
-      payload: data
-    });
+    try {
+      const {data} = await apiPost({
+        data: {
+          lan,
+          lng
+        },
+        url: '/get-weather'
+      });
+      dispatch({
+        type: ACTIONS.MAP.ADD_CITY_TO_ARRAY,
+        payload: data
+      });
+    } catch (e) {
+      toast.error('Try to choose another coordinate!');
+    }
   };
 };

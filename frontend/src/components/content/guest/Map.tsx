@@ -1,29 +1,30 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {MapContainer, Marker, Popup, TileLayer, useMapEvents} from 'react-leaflet';
-import {useAppDispatch} from "../../../hooks";
+import {useAppDispatch, useAppSelector} from "../../../hooks";
 import './map.css';
 import icon from "../../../utils/constants";
+import {getWeatherByCoord, setUserPosition} from "../../../store/actions/mapActions";
 
 function ClickableLayer() {
+  const dispatch = useAppDispatch();
   const map = useMapEvents({
-    dblclick: () => {
+    dblclick: (e: { latlng: { lat: number; lng: number; }; }) => {
+      dispatch(getWeatherByCoord(e.latlng.lat, e.latlng.lng));
       map.locate();
-    },
-    locationfound: (location) => {
-      console.log('location found:', location);
-    },
+    }
   });
   return null;
 }
 
 const MapComponent = () => {
-  const [userGeo, setUserGeo] = useState<[number, number]>();
+  const dispatch = useAppDispatch();
+  const userGeo: [number, number] = useAppSelector((state) => state.map["userPosition"]);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((data) => {
-      setUserGeo([data.coords.latitude, data.coords.longitude]);
+      dispatch(setUserPosition(data.coords.latitude, data.coords.longitude));
     }, () => {
-      setUserGeo([48.45, 34.98]);
+      dispatch(setUserPosition(48.45, 34.98));
     }, {timeout: 1000});
   }, []);
 
@@ -34,6 +35,7 @@ const MapComponent = () => {
       </div>
     );
   }
+  console.log(11111, userGeo);
   return (
     <MapContainer
       center={userGeo}
