@@ -1,5 +1,5 @@
 import {ACTIONS} from "../../utils/constants";
-import {apiDelete, apiGet, apiPost, apiPut} from "../../http/httpPlaceholder";
+import {apiPost} from "../../http/httpPlaceholder";
 
 type Post = {
   id: number,
@@ -11,15 +11,38 @@ type Post = {
   content_snippet: string
 }
 
-export const setPosts = (page: number, queryString: string) => {
+export const setUserStartPosition = () => {
   return async (dispatch: any) => {
-    const {data}: any = await apiGet({
-      url: `/posts/offset/${page}?${queryString}`
-    })
+    const position = localStorage.getItem('position');
+    if (position) {
+      dispatch({
+        type: ACTIONS.MAP.SET_USER_DEFAULT_POSITION,
+        payload: position
+      });
+    }
+  };
+};
+
+export const setUserPosition = (lan: number, lng: number) => {
+  return async (dispatch: any) => {
     dispatch({
-      type: ACTIONS.POSTS.SET_POSTS,
+      type: ACTIONS.MAP.SET_USER_DEFAULT_POSITION,
+      payload: [lan, lng]
+    });
+  };
+};
+
+export const getWeatherByCoord = (lan: number, lng: number) => {
+  return async (dispatch: any) => {
+    const {data} = await apiPost({
+      data: {
+        lan,
+        lng
+      }
+    });
+    dispatch({
+      type: ACTIONS.MAP.ADD_CITY_TO_ARRAY,
       payload: data
     });
-  }
-}
-
+  };
+};

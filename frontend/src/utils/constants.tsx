@@ -1,13 +1,19 @@
 import Map from "../components/content/guest/Map";
+import L from "leaflet";
+
+
+export default L.icon({
+  iconSize: [25, 41],
+  iconAnchor: [10, 41],
+  popupAnchor: [2, -40],
+  iconUrl: "https://unpkg.com/leaflet@1.6/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.6/dist/images/marker-shadow.png"
+});
 
 export const ACTIONS = {
-  POSTS: {
-    SET_POSTS: "POSTS.SET_POSTS",
-    SET_PAGE: "POSTS.SET_PAGE",
-    SET_READY_POSTS: "POSTS.SET_READY_POSTS",
-    DELETE_POST: "POSTS.DELETE_POST",
-    UPDATE_POST: "POSTS.UPDATE_POST",
-    ADD_POST: "POSTS.ADD_POST",
+  MAP: {
+    SET_USER_DEFAULT_POSITION: "MAP.SET_USER_DEFAULT_POSITION",
+    ADD_CITY_TO_ARRAY: "MAP.ADD_CITY_TO_ARRAY"
   }
 };
 

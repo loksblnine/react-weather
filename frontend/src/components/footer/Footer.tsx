@@ -4,7 +4,7 @@ import './footer.css';
 function Footer() {
   return (
     <div className="footer">
-      Zinchenko Illia @16.06.2021
+      Zinchenko Illia @27.06.2022
     </div>
   );
 }

@@ -1,9 +1,11 @@
 import axios from "axios";
 
-export const apiGet = axios.create({baseURL: "http://localhost:5000"})
-export const apiPost = axios.create({baseURL: "http://localhost:5000"})
-export const apiDelete = axios.create({baseURL: "http://localhost:5000"})
-export const apiPut = axios.create({baseURL: "http://localhost:5000"})
+const apiUrl = process.env.NODE_ENV === "development" ? "http://localhost:5000" : "https://herokuapp";
+
+export const apiGet = axios.create({baseURL: apiUrl});
+export const apiPost = axios.create({baseURL: apiUrl});
+export const apiDelete = axios.create({baseURL: apiUrl});
+export const apiPut = axios.create({baseURL: apiUrl});
 
 apiGet.interceptors.request.use((config) => {
   config.method = "get";
