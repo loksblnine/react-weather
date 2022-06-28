@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {MapContainer, Marker, Popup, TileLayer, useMapEvents} from 'react-leaflet';
 import {useAppDispatch, useAppSelector} from "../../../hooks";
 import './map.css';
@@ -16,7 +16,9 @@ const ClickableLayer = () => {
           lng: event.popup.getLatLng()?.lng
         }
       });
-    },
+      const top = document.getElementById("Panel")?.offsetTop || 0;
+      window.scrollTo(0, top);
+      },
     popupclose: (event) => {
       dispatch({
         type: "MAP.SET_OPEN_PANEL",
@@ -33,6 +35,7 @@ const ClickableLayer = () => {
 
 const MapComponent = () => {
   const dispatch = useAppDispatch();
+  const [showMarkers, setShowMarkers] = useState(true)
   const cities = useAppSelector(state => state.map.cities);
   const userGeo: [number, number] = useAppSelector((state) => state.map["userPosition"]);
   const chosenCity = useAppSelector((state) => state.map.chosenCity);
@@ -58,7 +61,7 @@ const MapComponent = () => {
     <React.Fragment>
       <button className="btn m-5" type="button" data-toggle="collapse"
               disabled={chosenCity.name === undefined}
-              data-target="#Filter" onClick={(e) => {
+              data-target="#Panel" onClick={(e) => {
         e.preventDefault();
         dispatch({
           type: "MAP.SET_OPEN_PANEL",
@@ -67,6 +70,14 @@ const MapComponent = () => {
       }}
               aria-controls="Filter">Weather Panel &nbsp;
         {!openWeatherPanel ? EXPAND_ARROWS : COLLAPSE_ARROWS}
+      </button>
+      <button className={`btn m-5 ${showMarkers ? "btn-outline-danger" : "btn-outline-success"}`} type="button"
+              disabled={cities.length === 0}
+              onClick={(e) => {
+        e.preventDefault();
+        setShowMarkers(!showMarkers)
+      }}
+              aria-controls="Filter">Toggle markers
       </button>
       {openWeatherPanel && (
         <div id="Panel">
@@ -113,7 +124,7 @@ const MapComponent = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <ClickableLayer/>
-        {
+        {showMarkers &&
           cities?.map((city) => {
             return (
               <Marker position={[city.coord.lat, city.coord.lon]} icon={icon} key={`city-marker-${city.name}`}>
