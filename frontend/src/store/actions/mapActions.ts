@@ -24,21 +24,21 @@ export const setUserStartPosition = () => {
   };
 };
 
-export const setUserPosition = (lan: number, lng: number) => {
+export const setUserPosition = (lat: number, lng: number) => {
   return async (dispatch: any) => {
     dispatch({
       type: ACTIONS.MAP.SET_USER_DEFAULT_POSITION,
-      payload: [lan, lng]
+      payload: [lat, lng]
     });
   };
 };
 
-export const getWeatherByCoord = (lan: number, lng: number) => {
+export const getWeatherByCoord = (lat: number, lng: number) => {
   return async (dispatch: any) => {
     try {
       const {data} = await apiPost({
         data: {
-          lan,
+          lat,
           lng
         },
         url: '/get-weather'

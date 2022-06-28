@@ -4,12 +4,16 @@ type initialState = {
   isReady: boolean,
   cities: any[],
   userPosition: [number, number],
+  chosenCity: any,
+  openPanel: boolean
 }
 
 const initialState: initialState = {
   isReady: false,
   cities: [],
   userPosition: [0, 0],
+  chosenCity: {},
+  openPanel: false
 };
 
 const mapReducer = (state = initialState, action: { type: string; payload: any; }) => {
@@ -18,11 +22,10 @@ const mapReducer = (state = initialState, action: { type: string; payload: any; 
       return {
         ...state,
         isReady: true,
-        userPosition: action.payload
+        userPosition: action.payload,
       };
     }
     case ACTIONS.MAP.ADD_CITY_TO_ARRAY: {
-      console.log(action.payload);
       let wasInArray = false;
       for (let i = 0; i < state.cities.length; i++) {
         if (state.cities[i].name === action.payload.name) {
@@ -42,6 +45,21 @@ const mapReducer = (state = initialState, action: { type: string; payload: any; 
       return {
         ...state,
         cities: array
+      };
+    }
+    case ACTIONS.MAP.CHOOSE_CITY: {
+      return {
+        ...state,
+        chosenCity: state.cities.filter((city) => {
+          return city.coord.lat === action.payload.lat && city.coord.lon === action.payload.lng;
+        })[0],
+        openPanel: true
+      };
+    }
+    case ACTIONS.MAP.SET_OPEN_PANEL: {
+      return {
+        ...state,
+        openPanel: action.payload
       };
     }
     default:
