@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiUrl = "https://online-weather-backend.herokuapp.com";
+const apiUrl = "http://localhost:9000";
 
 export const apiGet = axios.create({baseURL: apiUrl});
 export const apiPost = axios.create({baseURL: apiUrl});
